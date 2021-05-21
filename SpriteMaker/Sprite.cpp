@@ -62,6 +62,63 @@ Sprite::~Sprite()
 	vPixel.clear();
 }
 
+Sprite Sprite::rectangle(Position rootPos, unsigned size, COLOURREF colour)
+{
+	Sprite out;
+	for (unsigned i = 0; i < size; i++)
+		for (unsigned j = 0; j < size; j++)
+			out.addPixel(Pixel(
+				Position(
+					int(j + rootPos.x),
+					int(i + rootPos.y)),
+				colour)
+			);
+	return out;
+}
+
+Sprite Sprite::rectangle(Position rootPos, Position endPos, COLOURREF colour)
+{
+	if (rootPos.x >= endPos.x or rootPos.y >= endPos.y)
+		return Sprite();
+
+	Sprite out;
+	for (unsigned i = 0; i < endPos.y; i++)
+		for (unsigned j = 0; j < endPos.x; j++)
+			out.addPixel(Pixel(
+				Position(
+					int(j + rootPos.x),
+					int(i + rootPos.y)),
+				colour)
+			);
+	return out;
+}
+
+Sprite Sprite::pointer(Position rootPos, unsigned size, COLOURREF colour)
+{
+	Sprite out;
+	for (unsigned i = 0; i < size; i++)
+		for (unsigned j = 0; j < size; j++)
+		{
+			if (
+				i == 0 or i == size - 1 or
+				j == 0 or j == size - 1 or
+				size % 2 == 0 and
+				(size / 2 == i + 1 and size / 2 == j + 1 or
+				size / 2 == i + 1 and size / 2 == j or
+				size / 2 == i and size / 2 == j + 1 or
+				size / 2 == i and size / 2 == j)
+				)
+				out.addPixel(Pixel(
+					Position(
+						int(j + rootPos.x),
+						int(i + rootPos.y)),
+					colour)
+				);
+
+		}
+	return out;
+}
+
 Pixel Sprite::getPixel(size_t index)
 {
 	if (index >= vPixel.size())
@@ -140,6 +197,12 @@ void Sprite::movePixels(Position addPos)
 		vPixel[i].updatePixel(addPos.x, addPos.y);
 }
 
+void Sprite::massColourChange(COLOURREF newColour)
+{
+	for (size_t i = 0; i < vPixel.size(); i++)
+		vPixel[i].colour = newColour;
+}
+
 void Sprite::draw(HDC hdc)
 {
 	for (size_t i = 0; i < vPixel.size(); i++)
@@ -170,16 +233,3 @@ Sprite& Sprite::operator-=(Sprite& rhs)
 	return *this;
 }
 
-Sprite Sprite::rectangle(Position rootPos, unsigned size, COLOURREF colour)
-{
-	Sprite out;
-	for (unsigned i = 0; i < size; i++)
-		for (unsigned j = 0; j < size; j++)
-			out.addPixel(Pixel(
-				Position(
-					int(j + rootPos.x),
-					int(i + rootPos.y)),
-				colour)
-			);
-	return out;
-}

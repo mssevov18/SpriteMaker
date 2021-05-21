@@ -27,15 +27,17 @@ struct Pixel
 	Pixel();
 	Pixel(Position newPos, COLOURREF newColour);
 
-	Position pos;
+	Position  pos;
 	COLOURREF colour;
 
 	void updatePixel(int addX, int addY);
 
-	bool   operator== (Pixel& r);
-	bool   operator!= (Pixel& r);
+	bool operator== (Pixel& r);
+	bool operator!= (Pixel& r);
 };
 
+#define GetPixelPosStruct(hdc, position) (GetPixel(hdc, position.x, position.y))
+#define GetPixelPixStruct(hdc, pixel) (GetPixel(hdc, pixel.pos.x, pixel.pos.y))
 #define SetPixelStruct(hdc, pixel) (SetPixel(hdc, pixel.pos.x, pixel.pos.y, pixel.colour))
 #define SetPixelFill(hdc, pixel, newColour) (SetPixel(hdc, pixel.pos.x, pixel.pos.y, newColour))
 
@@ -47,6 +49,9 @@ public:
 	~Sprite();
 
 	static Sprite rectangle(Position rootPos, unsigned size, COLOURREF colour);
+	static Sprite rectangle(Position rootPos, Position endPos, COLOURREF colour);
+
+	static Sprite pointer(Position rootPos, unsigned size, COLOURREF colour);
 
 protected:
 	std::vector<Pixel> vPixel;
@@ -59,6 +64,7 @@ public:
 
 	void movePixels(int addX, int addY);
 	void movePixels(Position addPos);
+	void massColourChange(COLOURREF newColour);
 
 	void draw(HDC hdc);
 	void draw(HDC hdc, COLOURREF newColour);
