@@ -82,12 +82,12 @@ Sprite Sprite::rectangle(Position rootPos, Position endPos, COLOURREF colour)
 		return Sprite();
 
 	Sprite out;
-	for (unsigned i = 0; i < endPos.y; i++)
-		for (unsigned j = 0; j < endPos.x; j++)
+	for (int i = 0; i < endPos.y; i++)
+		for (int j = 0; j < endPos.x; j++)
 			out.addPixel(Pixel(
 				Position(
-					int(j + rootPos.x),
-					int(i + rootPos.y)),
+					j + rootPos.x,
+					i + rootPos.y),
 				colour)
 			);
 	return out;
@@ -102,11 +102,40 @@ Sprite Sprite::pointer(Position rootPos, unsigned size, COLOURREF colour)
 			if (
 				i == 0 or i == size - 1 or
 				j == 0 or j == size - 1 or
+				
 				size % 2 == 0 and
 				(size / 2 == i + 1 and size / 2 == j + 1 or
-				size / 2 == i + 1 and size / 2 == j or
-				size / 2 == i and size / 2 == j + 1 or
-				size / 2 == i and size / 2 == j)
+				 size / 2 == i + 1 and size / 2 == j or
+				 size / 2 == i and size / 2 == j + 1 or
+				 size / 2 == i and size / 2 == j) or
+				
+				size % 2 == 1 and
+				(size / 2 == i and size / 2 == j or
+				 size / 2 == i + 1 and size / 2 == j or
+				 size / 2 == i - 1 and size / 2 == j or
+				 size / 2 == i and size / 2 == j + 1 or
+				 size / 2 == i and size / 2 == j - 1)
+				)
+				out.addPixel(Pixel(
+					Position(
+						int(j + rootPos.x),
+						int(i + rootPos.y)),
+					colour)
+				);
+
+		}
+	return out;
+}
+
+Sprite Sprite::border(Position rootPos, unsigned size, COLOURREF colour)
+{
+	Sprite out;
+	for (unsigned i = 0; i < size; i++)
+		for (unsigned j = 0; j < size; j++)
+		{
+			if (
+				i == 0 or i == size - 1 or
+				j == 0 or j == size - 1
 				)
 				out.addPixel(Pixel(
 					Position(

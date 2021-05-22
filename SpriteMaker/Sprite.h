@@ -53,6 +53,8 @@ public:
 
 	static Sprite pointer(Position rootPos, unsigned size, COLOURREF colour);
 
+	static Sprite border(Position rootPos, unsigned size, COLOURREF colour);
+
 protected:
 	std::vector<Pixel> vPixel;
 

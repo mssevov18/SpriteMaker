@@ -11,11 +11,14 @@
 
 #define pallete palette
 #define backgroundColour palette[0]
-#define primaryColour palette[1]
-#define secondaryColour palette[2]
-#define pointerColour palette[3]
+#define pointerColour palette[1]
+#define primaryColour palette[2]
+#define secondaryColour palette[3]
 
 Position getResolution();
+
+char getDigitCount(int number);
+
 
 //create properties menu
 //create pointer shape
@@ -45,6 +48,7 @@ protected:
 	void propertiesEditor();
 
 	void showPalette(Position rootPos);
+	COLOURREF colourEditor();
 
 	void updateSprite(char mode);
 
